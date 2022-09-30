@@ -19,12 +19,24 @@ class RandomChar extends Component {
         this.setState({char: char})
     }
 
+    descrCheck = (char) => {
+        let description = char.description;
+        
+        if (description == '') {
+            char.description = 'There is no additional info';
+        } else if (description.length > 205) {
+            char.description = description.substr(0, 205) + '...';
+        }
+
+        this.onChatLoaded(char);
+    }
+
     updateChar = () => {
         // const id = 1011005;
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         this.marvelService
             .getCharacter(id)
-            .then(this.onChatLoaded)
+            .then(this.descrCheck)
     }
 
     render() {
