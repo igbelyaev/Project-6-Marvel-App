@@ -20,9 +20,9 @@
             box-shadow: 0 5px 20px $main-color;
             transform: translateY(-8px);
         }
-        &+.pt-off {
-            padding-top: 0;
-        }
+        // &+.pt-off {
+        //     padding-top: 0;
+        // }
     }
     &__name {
         font-weight: bold;
@@ -33,5 +33,6 @@
     }
 }
 .of-con {
-    object-fit: contain;
+    // object-fit: contain;
+    object-fit: unset;
 }

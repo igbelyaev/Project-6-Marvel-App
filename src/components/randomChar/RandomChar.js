@@ -22,6 +22,13 @@ class RandomChar extends Component {
     onCharLoaded = (char) => {
         this.setState({char: char, loading: false, error: false})
     }
+    
+    onCharLoading = () => {
+        this.setState({
+            loading: true
+        })
+    }
+    
 
     onError = () => {
         this.setState({loading: false, error: true})
@@ -42,6 +49,7 @@ class RandomChar extends Component {
     updateChar = () => {
         // const id = 1011005;
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.onCharLoading();
         this.marvelService
             .getCharacter(id)
             .then(this.descrCheck)

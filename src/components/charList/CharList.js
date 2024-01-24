@@ -6,10 +6,10 @@ import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 
 class CharList extends Component {
-
-    state = {
-        list: []
-    }
+        state = {
+            list: []
+        }
+    
 
     marvelService = new MarvelService();
 
@@ -35,10 +35,12 @@ class CharList extends Component {
 
         const element = data.map(item => {
             const {id, ...itemProps} = item;
+            
 
             return (
                 <CharListItem 
                 key={id}
+                onCharSelected={() => this.props.onCharSelected(id)}
                 {...itemProps}/>
             )
 
