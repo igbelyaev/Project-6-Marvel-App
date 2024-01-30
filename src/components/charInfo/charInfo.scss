@@ -21,7 +21,7 @@
         display: grid;
         grid-template-columns: 150px auto;
         column-gap: 25px;
-        img {
+        &__img {
             width: 150px;
             height: 150px;
             object-fit: cover;
@@ -61,5 +61,14 @@
         line-height: 24px;
         text-align: center;
     }
+    // &__img {
+    //     width: 180px;
+    //     height: 180px;
+    //     object-fit: cover;
+    // }
 
+}
+
+.of-con {
+    object-fit: contain;
 }

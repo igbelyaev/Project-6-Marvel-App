@@ -1,13 +1,19 @@
 import { Component } from 'react/cjs/react.development';
 import MarvelService from '../../services/MarvelService';
 import CharListItem from '../charListItem/CharListItem';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+import Spinner from '../spinner/Spinner';
 
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 
 class CharList extends Component {
         state = {
-            list: []
+            list: [],
+            loading: true,
+            error: false,
+            newItemLoading: false,
+            offset: 210
         }
     
 
@@ -17,13 +23,31 @@ class CharList extends Component {
         this.getCharList();
     }
 
-    listUpdate = (list) => {
-        this.setState({list: list});
+    onRequest = (offset) => {
+        this.getCharList(offset)
     }
 
-    getCharList = () => {
+    onCharListLoading = () => {
+        this.setState({
+            newItemLoading: true
+        })
+    }
+
+    listUpdate = (newList) => {
+        this.setState(({offset, list}) => ({
+            list: [...list, newList],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9
+        }));
+
+        console.log(this.state.list);
+    }
+
+    getCharList = (offset) => {
+        this.onCharListLoading();
         this.marvelService
-            .getAllCharacters()
+            .getAllCharacters(offset)
             .then(this.listUpdate)
             .catch(this.onError);
     }
@@ -31,10 +55,17 @@ class CharList extends Component {
     
     render() {
 
+        const {loading, error, offset, newItemLoading} = this.state;
+
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const spinner = loading ? <Spinner/> : null;
+ 
         const data = this.state.list;
 
-        const element = data.map(item => {
+        let element = data.map(item => {
             const {id, ...itemProps} = item;
+
+            console.log(id);
             
 
             return (
@@ -46,6 +77,9 @@ class CharList extends Component {
 
         })
 
+        element = !(loading || error) ? element : null;
+
+
 
         return (
             <div className="char__list">
@@ -54,9 +88,15 @@ class CharList extends Component {
                         <img src={abyss} alt="abyss"/>
                         <div className="char__name">Abyss</div>
                     </li> */}
+                    {errorMessage}
+                    {spinner}
                     {element}
                 </ul>
-                <button className="button button__main button__long">
+                <button 
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    onClick={() => this.onRequest(offset)}
+                    >
                     <div className="inner">load more</div>
                 </button>
             </div>

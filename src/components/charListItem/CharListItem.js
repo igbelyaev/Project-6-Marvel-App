@@ -11,7 +11,7 @@ const CharListItem = (props) => {
     }
 
     return (
-        <li className={liClassName} onClick={onCharSelected} >
+        <li className={liClassName} onClick={onCharSelected}>
             <img className={imgClassName} src={thumbnail} alt="abyss"/>
             <div className="char__name">{name}</div>
         </li>
