@@ -35,13 +35,12 @@ class CharList extends Component {
 
     listUpdate = (newList) => {
         this.setState(({offset, list}) => ({
-            list: [...list, newList],
+            list: [...list, ...newList],
             loading: false,
             newItemLoading: false,
             offset: offset + 9
         }));
 
-        console.log(this.state.list);
     }
 
     getCharList = (offset) => {
@@ -62,13 +61,10 @@ class CharList extends Component {
  
         const data = this.state.list;
 
-        let element = data.map(item => {
+        let element = data.map((item, i) => {
             const {id, ...itemProps} = item;
 
-            console.log(id);
-            
-
-            return (
+           return (
                 <CharListItem 
                 key={id}
                 onCharSelected={() => this.props.onCharSelected(id)}
@@ -78,8 +74,6 @@ class CharList extends Component {
         })
 
         element = !(loading || error) ? element : null;
-
-
 
         return (
             <div className="char__list">
