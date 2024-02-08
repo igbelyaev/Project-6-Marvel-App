@@ -20,8 +20,27 @@ class CharList extends Component {
 
     marvelService = new MarvelService();
 
+    observer = new IntersectionObserver(([entry], observer) => {
+        if (entry.isIntersecting) {
+            this.observer.unobserve(entry.target);
+            this.getCharList(this.state.offset);
+        }
+    }, {});    
+
     componentDidMount() {
         this.getCharList();
+    }
+
+    componentDidUpdate(prevProps) {
+        const lastItem = document.querySelector('li.char__item:last-of-type');
+        
+        if (lastItem &&
+            !this.state.newItemLoading &&
+            this.props.charId === prevProps.charId &&
+            !this.state.charEnded) {
+            this.observer.observe(lastItem);
+        }
+
     }
 
     onRequest = (offset) => {
@@ -47,6 +66,8 @@ class CharList extends Component {
             offset: offset + 9,
             charEnded: ended
         }));
+
+
 
     }
 
