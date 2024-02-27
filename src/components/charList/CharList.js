@@ -3,6 +3,7 @@ import MarvelService from '../../services/MarvelService';
 import CharListItem from '../charListItem/CharListItem';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
+import PropTypes from 'prop-types';
 
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
@@ -126,6 +127,10 @@ class CharList extends Component {
         )
     }
       
+}
+
+CharList.propTypes = {
+    onCharSelected: PropTypes.func.isRequired
 }
 
 export default CharList;
