@@ -1,4 +1,5 @@
-import { Component } from 'react/cjs/react.development';
+import { React, Component} from 'react/cjs/react.development';
+import { useRef } from 'react';
 import MarvelService from '../../services/MarvelService';
 import CharListItem from '../charListItem/CharListItem';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -17,6 +18,10 @@ class CharList extends Component {
             offset: 210,
             charEnded: false
         }
+
+    itemRefs = [];
+    // listRef = React.createRef();
+    // listRef = useRef(null);
     
 
     marvelService = new MarvelService();
@@ -26,7 +31,14 @@ class CharList extends Component {
             this.observer.unobserve(entry.target);
             this.getCharList(this.state.offset);
         }
-    }, {});    
+    }, {});  
+    
+    getMap() {
+        if (!this.listRef.current) {
+            this.listRef.current = new Map();
+        }
+        return this.listRef.current;
+    }
 
     componentDidMount() {
         this.getCharList();
@@ -41,6 +53,8 @@ class CharList extends Component {
             !this.state.charEnded) {
             this.observer.observe(lastItem);
         }
+
+        console.log(this.itemRefs);
 
     }
 
@@ -80,6 +94,24 @@ class CharList extends Component {
             .catch(this.onError);
     }
 
+    setRef = ref => {
+        console.log(ref);
+        this.itemRefs.push(ref);
+    };
+
+    focusOnItem = (i) => {
+        // Я реализовал вариант чуть сложнее, и с классом и с фокусом
+        // Но в теории можно оставить только фокус, и его в стилях использовать вместо класса
+        // На самом деле, решение с css-классом можно сделать, вынеся персонажа
+        // в отдельный компонент. Но кода будет больше, появится новое состояние
+        // и не факт, что мы выиграем по оптимизации за счет бОльшего кол-ва элементов
+
+        // По возможности, не злоупотребляйте рефами, только в крайних случаях
+        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
+        this.itemRefs[i].classList.add('char__item_selected');
+        this.itemRefs[i].focus();
+    }
+
     
     render() {
 
@@ -97,6 +129,8 @@ class CharList extends Component {
                 <CharListItem 
                 key={id}
                 onCharSelected={() => this.props.onCharSelected(id)}
+                // onClick={this.focusOnItem(i)}
+                ref={this.setRef}
                 {...itemProps}/>
             )
 
